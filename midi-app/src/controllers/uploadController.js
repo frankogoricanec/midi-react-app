@@ -1,12 +1,13 @@
 import axios from "axios";
 
+const BASE_URL = "https://midi-backend.onrender.com";
+
 export function handleInputChange(e, formData, setFormData) {
   const { name, value, files } = e.target;
 
   if (name === "file") {
     setFormData({ ...formData, file: files[0] });
   } else if (name === "tags") {
-    // Just store raw text here, parse on submit
     setFormData({ ...formData, tagsText: value });
   } else {
     setFormData({ ...formData, [name]: value });
@@ -19,7 +20,6 @@ export async function submitUpload(formData, resetForm) {
 
     if (!file) throw new Error("File is required");
 
-    // Parse tagsText into array by splitting on commas or spaces, filtering empty strings
     const tags = tagsText
       .split(/[\s,]+/)
       .map((tag) => tag.trim())
@@ -31,7 +31,7 @@ export async function submitUpload(formData, resetForm) {
     data.append("tags", JSON.stringify(tags));
     data.append("description", description);
 
-    await axios.post("/addfile", data, {
+    await axios.post(`${BASE_URL}/addfile`, data, {
       headers: { "Content-Type": "multipart/form-data" },
     });
 

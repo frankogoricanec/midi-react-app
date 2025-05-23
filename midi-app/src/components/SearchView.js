@@ -1,4 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
+import {
+  deleteFile,
+  updateFile,
+} from "../controllers/searchController";
+import "./SearchView.css";
 
 export default function SearchView({
   tags,
@@ -8,7 +13,53 @@ export default function SearchView({
   onTagToggle,
   onSubmit,
   results,
+  setResults,
 }) {
+  const [editingId, setEditingId] = useState(null);
+  const [editData, setEditData] = useState({});
+
+  const startEdit = (file) => {
+    setEditingId(file.id);
+    setEditData({
+      id: file.id,
+      name: file.name,
+      description: file.description,
+      tagsText: file.tags.join(" "),
+      file: null,
+    });
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditData({});
+  };
+
+  const handleEditChange = (e) => {
+    const { name, value, files } = e.target;
+    if (name === "file") {
+      setEditData({ ...editData, file: files[0] });
+    } else {
+      setEditData({ ...editData, [name]: value });
+    }
+  };
+
+  const saveEdit = () => {
+    updateFile(editData, () => {
+      const updated = results.map((f) =>
+        f.id === editData.id
+          ? {
+              ...f,
+              name: editData.name,
+              description: editData.description,
+              tags: editData.tagsText.split(/[\s,]+/),
+            }
+          : f
+      );
+      setResults(updated);
+      cancelEdit();
+    });
+  };
+
   return (
     <form onSubmit={onSubmit}>
       <div>
@@ -24,21 +75,15 @@ export default function SearchView({
 
       <div>
         <label>Filter by Tags:</label>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+        <div className="tag-container">
           {tags.map((tag) => (
             <button
               key={tag.id}
               type="button"
               onClick={() => onTagToggle(tag.id)}
-              style={{
-                background: selectedTags.includes(tag.id) ? "#d1d1d1" : "#e0e0e0",
-                padding: "8px 12px",
-                borderRadius: "12px",
-                border: "none",
-                boxShadow: `
-                  6px 6px 10px #bebebe,
-                  -6px -6px 10px #ffffff`,
-              }}
+              className={`tag-button ${
+                selectedTags.includes(tag.id) ? "selected" : ""
+              }`}
             >
               {tag.name}
             </button>
@@ -48,29 +93,65 @@ export default function SearchView({
 
       <button type="submit">Search</button>
 
-      <div style={{ marginTop: "24px" }}>
+      <div className="results">
         <h3>Results:</h3>
         {results.length === 0 ? (
           <p>No results.</p>
         ) : (
-          results.map((file, idx) => (
-            <div
-              key={idx}
-              style={{
-                padding: "16px",
-                margin: "12px 0",
-                background: "#e0e0e0",
-                borderRadius: "16px",
-                boxShadow: `
-                  6px 6px 12px #bebebe,
-                  -6px -6px 12px #ffffff`,
-              }}
-            >
-              <p><strong>Name:</strong> {file.name}</p>
-              <p><strong>Description:</strong> {file.description}</p>
-              <p><strong>Tags:</strong> {file.tags.join(", ")}</p>
-              <button>Edit</button>
-              <button>Delete</button>
+          results.map((file) => (
+            <div className="result-card" key={file.id}>
+              {editingId === file.id ? (
+                <>
+                  <input
+                    type="text"
+                    name="name"
+                    value={editData.name}
+                    onChange={handleEditChange}
+                  />
+                  <textarea
+                    name="description"
+                    value={editData.description}
+                    onChange={handleEditChange}
+                  />
+                  <input
+                    type="text"
+                    name="tagsText"
+                    value={editData.tagsText}
+                    onChange={handleEditChange}
+                  />
+                  <input
+                    type="file"
+                    name="file"
+                    accept=".mid"
+                    onChange={handleEditChange}
+                  />
+                  <button onClick={saveEdit} type="button">
+                    Save
+                  </button>
+                  <button onClick={cancelEdit} type="button">
+                    Cancel
+                  </button>
+                </>
+              ) : (
+                <>
+                  <p><strong>Name:</strong> {file.name}</p>
+                  <p><strong>Description:</strong> {file.description}</p>
+                  <p><strong>Tags:</strong> {file.tags.join(", ")}</p>
+                  <button onClick={() => startEdit(file)} type="button">
+                    Edit
+                  </button>
+                  <button
+                    onClick={() =>
+                      deleteFile(file.id, () =>
+                        setResults(results.filter((f) => f.id !== file.id))
+                      )
+                    }
+                    type="button"
+                  >
+                    Delete
+                  </button>
+                </>
+              )}
             </div>
           ))
         )}

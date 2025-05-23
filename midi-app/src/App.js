@@ -15,7 +15,6 @@ import "./App.css";
 export default function App() {
   const [activeTab, setActiveTab] = useState("upload");
 
-  // Upload state
   const [formData, setFormData] = useState({
     name: "",
     file: null,
@@ -23,7 +22,6 @@ export default function App() {
     description: "",
   });
 
-  // Search state
   const [tags, setTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -35,7 +33,6 @@ export default function App() {
     }
   }, [activeTab]);
 
-  // Upload handlers
   const onUploadChange = (e) =>
     handleInputChange(e, formData, setFormData);
 
@@ -46,14 +43,11 @@ export default function App() {
     );
   };
 
-  // Search handlers
   const onSearchInputChange = (e) => setSearchTerm(e.target.value);
-
   const onSearchSubmit = (e) => {
     e.preventDefault();
     submitSearch(selectedTags, searchTerm, setResults);
   };
-
   const onTagToggle = (id) =>
     toggleTag(id, selectedTags, setSelectedTags);
 
@@ -73,15 +67,17 @@ export default function App() {
       )}
 
       {activeTab === "search" && (
-        <SearchView
-          tags={tags}
-          selectedTags={selectedTags}
-          searchTerm={searchTerm}
-          onInputChange={onSearchInputChange}
-          onTagToggle={onTagToggle}
-          onSubmit={onSearchSubmit}
-          results={results}
-        />
+<SearchView
+  tags={tags}
+  selectedTags={selectedTags}
+  searchTerm={searchTerm}
+  onInputChange={onSearchInputChange}
+  onTagToggle={onTagToggle}
+  onSubmit={onSearchSubmit}
+  results={results}
+  setResults={setResults}
+/>
+
       )}
     </div>
   );

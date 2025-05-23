@@ -1,0 +1,69 @@
+.tag-container {
+  margin-top: 10px;
+  max-height: 120px;
+  overflow-y: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 18px;
+  border-radius: 12px;
+  background: #e0e0e0;
+  box-shadow: inset 6px 6px 10px #bebebe, inset -6px -6px 10px #ffffff;
+}
+
+.tag-button {
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: none;
+  background: #e0e0e0;
+  cursor: pointer;
+  box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #ffffff;
+}
+
+.tag-button.selected {
+  background: #b0b0b0;
+}
+
+.results {
+  margin-top: 24px;
+}
+
+.result-card {
+  padding: 16px;
+  margin: 12px 0;
+  background: #e0e0e0;
+  border-radius: 16px;
+  box-shadow: 6px 6px 12px #bebebe, -6px -6px 12px #ffffff;
+}
+
+
+.result-card button {
+  margin-right: 10px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 3px 3px 6px #bebebe, -3px -3px 6px #ffffff;
+}
+
+.result-card button:nth-of-type(1) {
+  background-color: #b2f2bb; /* pastel green */
+  color: #1b4332;
+}
+
+.result-card button:nth-of-type(2) {
+  background-color: #ffa8a8; /* pastel red */
+  color: #641e16;
+}
+
+.result-card input[type="text"],
+.result-card textarea {
+  width: 100%;
+  margin: 6px 0;
+  padding: 6px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
