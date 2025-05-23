@@ -155,3 +155,57 @@ form {
     12px 12px 24px #bebebe,
     -12px -12px 24px #ffffff;
 }
+
+
+.navbar {
+  display: flex;
+  align-items: center;
+  background-color: #4a7dcf; /* lighter blue */
+  padding: 10px 20px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  margin-bottom: 40px;
+    position: sticky;
+  top: 0;
+  z-index: 1000;
+
+}
+
+.navbar-logo {
+  width: 100px;
+  height: 50px;
+  object-fit: cover;
+  user-select: none;
+  pointer-events: none; /* not clickable */
+  margin-right: 0px;
+}
+
+.navbar-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.navbar-buttons button {
+  background: #4a7dcf; /* lighter blue */
+  border: none;
+  color: white;
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 6px;
+  box-shadow: none;
+  transition: background 0.3s ease;
+  cursor: pointer;
+  min-width: 100px;
+  text-align: center;
+  user-select: none;
+}
+
+.navbar-buttons button:hover {
+  background: #a2c0ff;
+}
+
+.navbar-buttons button.active {
+  background: #3571e0;
+  box-shadow:
+    inset 3px 3px 6px #2a55b0,
+    inset -3px -3px 6px #4891ff;
+}

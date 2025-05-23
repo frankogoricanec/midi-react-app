@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import {
-  deleteFile,
-  updateFile,
-} from "../controllers/searchController";
+import { deleteFile, updateFile, downloadFile } from "../controllers/searchController";
+
 import "./SearchView.css";
+
+
 
 export default function SearchView({
   tags,
@@ -15,6 +15,7 @@ export default function SearchView({
   results,
   setResults,
 }) {
+   
   const [editingId, setEditingId] = useState(null);
   const [editData, setEditData] = useState({});
 
@@ -150,6 +151,11 @@ export default function SearchView({
                   >
                     Delete
                   </button>
+                  <button onClick={() => downloadFile(file.id)} type="button">
+  Download
+</button>
+
+
                 </>
               )}
             </div>

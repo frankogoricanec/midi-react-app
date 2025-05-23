@@ -23,6 +23,35 @@ export async function deleteFile(fileId, onSuccess) {
   }
 }
 
+export async function downloadFile(fileId) {
+  try {
+    const res = await axios.post(
+      `${BASE_URL}/downloadfile`,
+      { id: fileId },
+      {
+        headers: { "Content-Type": "application/json" },
+        responseType: "blob",
+      }
+    );
+
+    const blob = new Blob([res.data], { type: "audio/midi" });
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "file.mid";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+  } catch (err) {
+    console.error("Download failed:", err);
+    alert("Failed to download file.");
+  }
+}
+
+
+
 export async function updateFile(file, onSuccess) {
   try {
     const tags = file.tagsText
@@ -48,9 +77,6 @@ export async function updateFile(file, onSuccess) {
   }
 }
 
-
-
-
 export function toggleTag(tagId, selectedTags, setSelectedTags) {
   if (selectedTags.includes(tagId)) {
     setSelectedTags(selectedTags.filter((id) => id !== tagId));
@@ -59,11 +85,7 @@ export function toggleTag(tagId, selectedTags, setSelectedTags) {
   }
 }
 
-export async function submitSearch(
-  selectedTags,
-  searchTerm,
-  setResults
-) {
+export async function submitSearch(selectedTags, searchTerm, setResults) {
   try {
     const payload = {
       tags: selectedTags,

@@ -12,6 +12,30 @@ import {
 } from "./controllers/searchController";
 import "./App.css";
 
+function Navbar({ activeTab, setActiveTab }) {
+  return (
+    <nav className="navbar">
+      <img src="/logo.png" alt="Logo" className="navbar-logo" />
+      <div className="navbar-buttons">
+        <button
+          className={activeTab === "upload" ? "active" : ""}
+          onClick={() => setActiveTab("upload")}
+          type="button"
+        >
+          Upload
+        </button>
+        <button
+          className={activeTab === "search" ? "active" : ""}
+          onClick={() => setActiveTab("search")}
+          type="button"
+        >
+          Search
+        </button>
+      </div>
+    </nav>
+  );
+}
+
 export default function App() {
   const [activeTab, setActiveTab] = useState("upload");
 
@@ -53,10 +77,7 @@ export default function App() {
 
   return (
     <div>
-      <nav>
-        <button onClick={() => setActiveTab("upload")}>Upload</button>
-        <button onClick={() => setActiveTab("search")}>Search</button>
-      </nav>
+      <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
 
       {activeTab === "upload" && (
         <UploadView
@@ -67,17 +88,16 @@ export default function App() {
       )}
 
       {activeTab === "search" && (
-<SearchView
-  tags={tags}
-  selectedTags={selectedTags}
-  searchTerm={searchTerm}
-  onInputChange={onSearchInputChange}
-  onTagToggle={onTagToggle}
-  onSubmit={onSearchSubmit}
-  results={results}
-  setResults={setResults}
-/>
-
+        <SearchView
+          tags={tags}
+          selectedTags={selectedTags}
+          searchTerm={searchTerm}
+          onInputChange={onSearchInputChange}
+          onTagToggle={onTagToggle}
+          onSubmit={onSearchSubmit}
+          results={results}
+          setResults={setResults}
+        />
       )}
     </div>
   );
